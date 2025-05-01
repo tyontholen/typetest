@@ -9,7 +9,11 @@ def start_screen(stdscr):
     stdscr.getkey()
 
 
-def display_text(stdscr, target, current, wpm=0):
+def display_text(stdscr, target_text, current_text, wpm=0):
+    stdscr.addstr(target_text)
+
+    for i, char in enumerate(current_text):
+        stdscr.addstr(0, i, char, curses.color_pair(1))
     
 
 def wpm_test(stdscr):
@@ -19,16 +23,12 @@ def wpm_test(stdscr):
     while True:
 
         stdscr.clear()
-        stdscr.addstr(target_text)
-
-        for char in current_text:
-            stdscr.addstr(char, curses.color_pair(1))
 
         stdscr.refresh()   
-
+        display_text(stdscr, target_text, current_text)
         key = stdscr.getkey()
 
-        if ord(key) == 27:
+        if key == "\x1b":
             break
         if key in ("KEY_BACKSPACE", "\b", "\x7f"):
             if len(current_text) > 0:
